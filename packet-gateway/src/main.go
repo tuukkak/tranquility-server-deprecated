@@ -2,8 +2,11 @@ package main
 
 import (
 	"log"
+	"udp"
 )
 
 func main() {
-	log.Println("Hello World!")
+	log.Println("Starting packet gateway...")
+	go udp.Listener()
+	select {}
 }

@@ -2,3 +2,5 @@ version: "3.7"
 services:
     packet-gateway:
         build: ./packet-gateway
+        ports:
+            - "3000:3000/udp"
