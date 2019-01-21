@@ -15,12 +15,12 @@ func Listener() {
 	for {
 		buf := make([]byte, 1024)
 		n, addr, err := pc.ReadFrom(buf)
-		log.Println("Packet received!")
-		log.Println(buf[:n])
-		log.Println(addr)
 		if err != nil {
 			continue
 		}
+		log.Println("Packet received!")
+		log.Println(buf[:n])
+		log.Println(addr)
 	}
 }
 
