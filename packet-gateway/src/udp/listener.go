@@ -3,6 +3,7 @@ package udp
 import (
 	"log"
 	"net"
+	"packet"
 )
 
 func Listener() {
@@ -21,6 +22,7 @@ func Listener() {
 		log.Println("Packet received!")
 		log.Println(buf[:n])
 		log.Println(addr)
+		packet.Unpack(buf[:n])
 	}
 }
 
