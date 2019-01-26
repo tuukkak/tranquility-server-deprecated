@@ -4,3 +4,5 @@ services:
         build: ./packet-gateway
         ports:
             - "3000:3000/udp"
+    redis:
+        image: redis:5.0.3-alpine
