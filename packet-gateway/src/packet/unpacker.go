@@ -1,7 +1,6 @@
 package packet
 
 import (
-	"log"
 	"encoding/binary"
 	"math"
 )
@@ -42,8 +41,6 @@ func Unpack(buffer []byte) Packet {
 		packet.InputZ = int8(buffer[index])
 		index += size
 	}
-
-	log.Println(packet)
 
 	return packet
 }
