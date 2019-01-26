@@ -19,7 +19,7 @@ func Send(que string, msg []byte) {
 	}
 
 	q, err := session.ch.QueueDeclare(
-		"hello", // name
+		que, // name
 		false,   // durable
 		false,   // delete when unused
 		false,   // exclusive
