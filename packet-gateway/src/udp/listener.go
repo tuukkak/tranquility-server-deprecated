@@ -20,9 +20,7 @@ func Listener() {
 			continue
 		}
 		log.Println("Packet received!")
-		log.Println(buf[:n])
 		log.Println(addr)
-		packet.Unpack(buf[:n])
+		go packet.Handler(buf[:n])
 	}
 }
-
