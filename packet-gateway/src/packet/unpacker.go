@@ -6,49 +6,46 @@ import (
 	"math"
 )
 
-const (
-	ACK = iota
-	MOVEMENT
-)
-
-func Unpack(buffer []byte) {
+func Unpack(buffer []byte) Packet {
 	packet := Packet{}
 	var index, size int
 
 	size = 1
-	packet.msgType = buffer[index]
+	packet.MsgType = buffer[index]
 	index += size
 
-	switch packet.msgType {
+	switch packet.MsgType {
 	case MOVEMENT:
 		var size int
 
 		size = 1
-		packet.playerID = buffer[index]
+		packet.PlayerID = buffer[index]
 		index += size
 
 		size = 4
-		packet.cordX = float32FromBytes(buffer[index:index+size])
+		packet.CordX = float32FromBytes(buffer[index:index+size])
 		index += size
 
 		size = 4
-		packet.cordZ = float32FromBytes(buffer[index:index+size])
+		packet.CordZ = float32FromBytes(buffer[index:index+size])
 		index += size
 
 		size = 4
-		packet.rotation = float32FromBytes(buffer[index:index+size])
+		packet.Rotation = float32FromBytes(buffer[index:index+size])
 		index += size
 
 		size = 1
-		packet.inputX = int8(buffer[index])
+		packet.InputX = int8(buffer[index])
 		index += size
 
 		size = 1
-		packet.inputZ = int8(buffer[index])
+		packet.InputZ = int8(buffer[index])
 		index += size
 	}
 
 	log.Println(packet)
+
+	return packet
 }
 
 func float32FromBytes(bytes []byte) float32 {
