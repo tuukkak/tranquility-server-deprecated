@@ -1,6 +1,6 @@
 # Tranquility Server
 
-Dockerized server boilerplate for real-time games
+Dockerized server boilerplate for real-time multiplayer games
 
 # Running locally
 
