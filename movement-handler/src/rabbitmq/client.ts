@@ -1,23 +1,25 @@
 import * as amqplib from 'amqplib';
 import { Movement } from '../controllers/movement';
 
-const channel = (host: string) => amqplib.connect(host).then(conn => conn.createChannel());
+const rabbitmq = (host: string) =>
+    amqplib
+        .connect(host)
+        .then(conn => conn.createChannel())
+        .then(channel => ({
+            publisher: (que: string) =>
+                channel
+                    .assertQueue(que, { durable: false })
+                    .then(_ok => (msg: string) => channel.sendToQueue(que, Buffer.from(msg))),
+            subscribe: (que: string, handler: (msg: Movement) => void) => {
+                channel.assertQueue(que, { durable: false }).then(_ok =>
+                    channel.consume(que, msg => {
+                        if (msg !== null) {
+                            channel.ack(msg);
+                            handler(JSON.parse(msg.content.toString()));
+                        }
+                    })
+                );
+            }
+        }));
 
-const messageBroker = (host: string, subQue: string, pubQue: string) =>
-    channel(host).then(channel => ({
-        publisher: channel
-            .assertQueue(pubQue, { durable: false })
-            .then(ok => (msg: string) => channel.sendToQueue(pubQue, Buffer.from(msg))),
-        subscribe: (messageHandler: (msg: Movement) => void) => {
-            channel.assertQueue(subQue, { durable: false }).then(ok =>
-                channel.consume(subQue, msg => {
-                    if (msg !== null) {
-                        channel.ack(msg);
-                        messageHandler(JSON.parse(msg.content.toString()));
-                    }
-                })
-            );
-        }
-    }));
-
-export default messageBroker;
+export default rabbitmq;
