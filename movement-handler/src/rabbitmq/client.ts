@@ -1,5 +1,5 @@
 import * as amqplib from 'amqplib';
-import { Movement } from '../controllers/movement';
+import { Movement } from '../movement';
 
 const rabbitmq = (host: string) =>
     amqplib

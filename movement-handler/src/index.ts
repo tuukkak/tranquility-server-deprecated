@@ -1,5 +1,5 @@
 import rabbitmq from './rabbitmq/client';
-import movementHandler, { Movement } from './controllers/movement';
+import movementHandler, { Movement } from './movement';
 
 rabbitmq('amqp://rabbitmq').then(messenger => {
     messenger.publisher('out').then(publish => {
