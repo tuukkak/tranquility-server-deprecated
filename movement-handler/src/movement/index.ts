@@ -1,10 +1,10 @@
 import { Movement } from './type';
 
-const movementController = (publish: (msg: string) => boolean) => ({
+const movementHandler = (publish: (msg: string) => boolean) => ({
     new: (movement: Movement) => {
         publish('asd');
     }
 });
 
-export default movementController;
+export default movementHandler;
 export type Movement = Movement;
