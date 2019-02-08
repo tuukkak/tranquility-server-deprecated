@@ -1,8 +1,8 @@
 export type Movement = {
-    playerID: Number;
-    cordX: Number;
-    cordZ: Number;
-    rotation: Number;
-    inputX: Number;
-    inputZ: Number;
+    playerID: number;
+    cordX: number;
+    cordZ: number;
+    rotation: number;
+    inputX: number;
+    inputZ: number;
 };
