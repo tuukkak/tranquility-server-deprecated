@@ -1,8 +1,13 @@
 export type Movement = {
-    playerID: number;
+    playerId: number;
     cordX: number;
     cordZ: number;
     rotation: number;
     inputX: number;
     inputZ: number;
 };
+
+export type Player = {
+    id: number;
+    address: string;
+}
