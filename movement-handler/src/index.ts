@@ -1,11 +1,10 @@
-import rabbitmq from './rabbitmq/client';
+import rabbitmq from './rabbitmq';
 import movementHandler, { Movement } from './movement';
 
-rabbitmq('amqp://rabbitmq').then(messenger => {
-    messenger.publisher('out').then(publish => {
-        const movement = movementHandler(publish);
-        messenger.subscribe('movement', (msg: Movement) => {
-            movement.new(msg);
-        });
+rabbitmq('amqp://rabbitmq', async (publisher, listener) => {
+    const publish = await publisher('outward');
+    const movement = movementHandler(publish);
+    listener('movement', (msg: Movement) => {
+        movement.move(msg);
     });
 });
