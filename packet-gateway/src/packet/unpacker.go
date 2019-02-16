@@ -3,6 +3,7 @@ package packet
 import (
 	"encoding/binary"
 	"math"
+	"bytes"
 )
 
 func Unpack(buffer []byte) Packet {
@@ -15,12 +16,8 @@ func Unpack(buffer []byte) Packet {
 
 	switch packet.MsgType {
 	case LOGIN:
-		size = 1
-		contentLength := buffer[index]
-		index += size
-
-		size = contentLength
-		packet.Name = string(buffer[index:index+size])
+		size = 12
+		packet.Name = string(bytes.Trim(buffer[index:index+size], "\x00"))
 		index += size
 	case JOIN:
 		size = 1

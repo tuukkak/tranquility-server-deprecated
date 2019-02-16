@@ -9,14 +9,14 @@ const (
 )
 
 type Packet struct {
-	MsgType uint8 `json:"msgType"`
+	MsgType uint8 `json:"-"`
 	PlayerId uint8 `json:"playerId,omitempty"`
 	Login
 	Movement
 }
 
 type Login struct {
-	Name string `json:"address,omitempty"`
+	Name string `json:"name,omitempty"`
 	Address string `json:"address,omitempty"`
 }
 

@@ -21,7 +21,6 @@ func Handler(buf []byte, addr net.Addr) {
 		packet.Address = addr.String()
 		rabbitmq.Publish("login", packetToJson(packet))
 	case JOIN:
-		packet.Address = addr.String()
 		rabbitmq.Publish("join", packetToJson(packet))
 	case MOVEMENT:
 		rabbitmq.Publish("movement", packetToJson(packet))
