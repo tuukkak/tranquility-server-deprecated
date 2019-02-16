@@ -14,11 +14,21 @@ func Unpack(buffer []byte) Packet {
 	index += size
 
 	switch packet.MsgType {
-	case MOVEMENT:
-		var size int
-
+	case LOGIN:
 		size = 1
-		packet.PlayerID = buffer[index]
+		contentLength := buffer[index]
+		index += size
+
+		size = contentLength
+		packet.Name = string(buffer[index:index+size])
+		index += size
+	case JOIN:
+		size = 1
+		packet.PlayerId = buffer[index]
+		index += size
+	case MOVEMENT:
+		size = 1
+		packet.PlayerId = buffer[index]
 		index += size
 
 		size = 4

@@ -2,25 +2,18 @@ package udp
 
 import (
 	"log"
-	"net"
 	"packet"
+	"conn"
 )
 
 func Listener() {
 	log.Println("Starting UDP listener...")
-	pc, err := net.ListenPacket("udp", ":3000")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer pc.Close()
 	for {
 		buf := make([]byte, 1024)
-		n, addr, err := pc.ReadFrom(buf)
+		n, addr, err := conn.Udp.ReadFrom(buf)
 		if err != nil {
 			continue
 		}
-		log.Println("Packet received!")
-		log.Println(addr)
-		go packet.Handler(buf[:n])
+		go packet.Handler(buf[:n], addr)
 	}
 }

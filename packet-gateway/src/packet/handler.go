@@ -3,16 +3,33 @@ package packet
 import (
 	"rabbitmq"
 	"encoding/json"
-	"error"
+	"err"
+	"net"
+	"log"
+	"conn"
 )
 
-func Handler(buf []byte) {
+func Handler(buf []byte, addr net.Addr) {
+	log.Println(addr.String())
+
 	packet := Unpack(buf);
 
 	switch packet.MsgType {
+	case LOGIN:
+		log.Println("Sending data back")
+		conn.Udp.WriteTo([]byte("hi"), addr)
+		packet.Address = addr.String()
+		rabbitmq.Publish("login", packetToJson(packet))
+	case JOIN:
+		packet.Address = addr.String()
+		rabbitmq.Publish("join", packetToJson(packet))
 	case MOVEMENT:
-		json, err := json.Marshal(packet)
-		error.Handler(err, "Couldn't json marshal the packet")
-		rabbitmq.Send("movement", json)
+		rabbitmq.Publish("movement", packetToJson(packet))
 	}
+}
+
+func packetToJson(packet Packet) []byte {
+	json, e := json.Marshal(packet)
+	err.Handler(e, "Couldn't json marshal the packet")
+	return json
 }
