@@ -4,6 +4,7 @@ services:
         build: ./packet-gateway
         ports:
             - "3000:3000/udp"
+        command: ["dockerize", "-wait", "tcp://rabbitmq:5672", "-timeout", "60s", "go", "run", "main.go"]
     movement-handler:
         build: ./movement-handler
         command: ["dockerize", "-wait", "tcp://rabbitmq:5672", "-timeout", "60s", "npm", "start"]
