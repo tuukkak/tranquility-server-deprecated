@@ -1,13 +1,18 @@
-import * as redis from 'redis';
-import rabbitmq from './rabbitmq'
-
-const client = redis.createClient({ host: 'redis' });
-client.set('game:1:players', JSON.stringify([1, 2, 3]));
+import rabbitmq from './rabbitmq';
+import { Login, Join } from './types';
+import gameHandler from './game';
 
 rabbitmq('amqp://rabbitmq', async (publisher, listener) => {
     const publish = await publisher('outward');
-    listener('join', (msg: object) => {
-        console.log('player joined')
-        console.log(msg);
+    const game = gameHandler(publish);
+
+    listener('login', (msg: Login) => {
+        console.log('New player logged in');
+        game.login(msg);
+    });
+    
+    listener('join', (msg: Join) => {
+        console.log('New player joined queue');
+        game.join(msg);
     });
 });
