@@ -6,6 +6,14 @@ import (
 	"bytes"
 )
 
+const (
+	ACK	= iota
+	LOGIN
+	JOIN
+	MOVEMENT
+	SPELL
+)
+
 func Unpack(buffer []byte) Packet {
 	packet := Packet{}
 	var index, size int
