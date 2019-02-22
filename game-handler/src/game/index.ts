@@ -6,6 +6,8 @@ let gameId: number = 1;
 let playerQue: Array<Player> = [];
 let team: number = 0;
 
+const gamePlayerSize: number = 2;
+
 const resetValues = () => {
     playerQue = [];
     team = 0;
@@ -17,8 +19,9 @@ const gameHandler = (publish: Function) => {
     const newGame = () => {
         state.set(`game:${gameId++}:players`, playerQue);
         const message = {
-            to: playerQue.map(p => p.id),
-            message: { length: playerQue.length, players: playerQue }
+            type: 2,
+            to: playerQue.map(p => p.address),
+            content: { length: playerQue.length, players: playerQue.map(p => ({ id: p.id, team: p.team })) }
         };
         resetValues();
         // Delay before starting the game
@@ -28,16 +31,18 @@ const gameHandler = (publish: Function) => {
     };
 
     const join = (msg: Join) => {
-        playerQue.push({ id: msg.id, team: team++ % 2 });
-        if (playerQue.length == 2) {
-            newGame();
-        }
+        state.get(`player:${msg.playerId}`, (err: Error | null, reply: Player) => {
+            playerQue.push({ id: msg.playerId, team: team++ % 2, address: reply.address });
+            if (playerQue.length == gamePlayerSize) {
+                newGame();
+            }
+        });
     };
 
     const login = (msg: Login) => {
         const player = { id: playerId++, name: msg.name, address: msg.address };
         state.set(`player:${player.id}`, player);
-        publish({ to: player.id, message: { id: player.id } });
+        publish({ type: 1, to: [msg.address], content: { id: player.id } });
     };
 
     return {

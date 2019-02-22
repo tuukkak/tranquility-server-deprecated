@@ -4,10 +4,11 @@ export type Login = {
 }
 
 export type Join = {
-    id: number;
+    playerId: number;
 };
 
 export type Player = {
     id: number;
     team: number;
+    address: string;
 };
