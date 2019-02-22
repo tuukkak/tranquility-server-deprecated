@@ -4,6 +4,7 @@ import * as redis from 'redis';
 const client = redis.createClient({ host: 'redis' });
 
 const move = (publish: Function) => (movement: Movement) => {
+    console.log('Received movement:', movement);
     const { playerId, ...rest } = movement;
     // Save movement in state
     client.set(`player:${playerId}:movement`, JSON.stringify(rest));
