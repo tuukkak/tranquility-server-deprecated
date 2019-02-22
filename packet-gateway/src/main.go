@@ -2,7 +2,7 @@ package main
 
 import (
 	"log"
-	"udp"
+	"udpin"
 	"conn"
 	"err"
 	"net"
@@ -13,7 +13,7 @@ func main() {
 	log.Println("Starting packet gateway...")
 	initializeUdpConnector()
 	defer conn.Udp.Close()
-	go udp.Listener()
+	go udpin.Listener()
 	go rabbitmq.Listener("outward")
 	select {}
 }

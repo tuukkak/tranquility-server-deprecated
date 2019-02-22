@@ -3,6 +3,7 @@ package rabbitmq
 import (
 	"err"
 	"log"
+	"udpout"
 )
 
 func Listener(que string) {
@@ -35,7 +36,8 @@ func Listener(que string) {
 
 	go func() {
 		for d := range msgs {
-			log.Printf("Received a message: %s", d.Body)
+			log.Printf("Received outgoing message: %s", d.Body)
+			udpout.Publish(d.Body)
 		}
 	}()
 
