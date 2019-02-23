@@ -10,13 +10,11 @@ const move = (publish: Function) => (movement: Movement) => {
     client.set(`player:${playerId}:movement`, rest);
     // Send movement to other players
     client.get('game:1:players', (err: Error | null, players: Player[]) =>
-        publish(
-            JSON.stringify({
-                type: 3,
-                to: players.filter((p: Player) => p.id !== playerId).map((p: Player) => p.address),
-                content: movement
-            })
-        )
+        publish({
+            type: 3,
+            to: players.filter((p: Player) => p.id !== playerId).map((p: Player) => p.address),
+            content: movement
+        })
     );
 };
 

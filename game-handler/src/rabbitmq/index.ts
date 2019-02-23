@@ -5,7 +5,7 @@ const channel = (host: string) => amqplib.connect(host).then(conn => conn.create
 const publisher = (channel: amqplib.Channel) => (que: string) =>
     channel
         .assertQueue(que, { durable: false })
-        .then(_ok => (msg: string) => channel.sendToQueue(que, Buffer.from(JSON.stringify(msg))));
+        .then(_ok => (msg: object) => channel.sendToQueue(que, Buffer.from(JSON.stringify(msg))));
 
 const listener = (channel: amqplib.Channel) => (que: string, callback: Function) => {
     channel.assertQueue(que, { durable: false }).then(_ok =>
