@@ -16,15 +16,17 @@ func Pack(msgType uint8, content Content) []byte {
 		data[1] = content.Id
 		data = data[:size]
 	case 2:
-		size = 2 + int(content.Length) * 2
+		size = 2 + int(content.Length) * 14
 		data[0] = 2
 		data[1] = content.Length
 		index := 2
 		for _, player := range content.Players {
 			data[index] = player.Id
-			index++
+			index += 1
+			copy(data[index:index+12], []byte(player.Name))
+			index += 12
 			data[index] = player.Team
-			index++
+			index += 1
 		}
 		data = data[:size]
 	case 3:

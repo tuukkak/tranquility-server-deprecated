@@ -45,6 +45,7 @@ type GameStart struct {
 
 type Player struct {
 	Id uint8 `json:"id,omitempty"`
+	Name string `json:"name,omitempty"`
 	Team uint8 `json:"team,omitempty"`
 }
 
