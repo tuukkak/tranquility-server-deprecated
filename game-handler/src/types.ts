@@ -10,6 +10,6 @@ export type Join = {
 export type Player = {
     id: number;
     name: string;
-    team: number;
+    team?: number;
     address: string;
 };
