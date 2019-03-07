@@ -1,26 +1,29 @@
-import { Movement, Player } from '../types';
-import * as redis from '../redis';
+import { Movement } from '../types';
+import * as state from '../state';
 
-const client = redis.createClient({ host: 'redis' });
+const movementHandler = (publish: Function) => {
+    const move = (movement: Movement) => {
+        console.log('Received movement:', movement);
+        const { playerId } = movement;
 
-const move = (publish: Function) => (movement: Movement) => {
-    console.log('Received movement:', movement);
-    const { playerId, ...rest } = movement;
-    // Save movement in state
-    client.set(`player:${playerId}:movement`, rest);
-    // Send movement to other players
-    client.get('game:1:players', (err: Error | null, players: Player[]) =>
-        publish({
-            type: 3,
-            to: players.filter((p: Player) => p.id !== playerId).map((p: Player) => p.address),
-            content: movement
-        })
-    );
+        // Save movement in state
+        state.setPlayerMovement(playerId, movement);
+
+        // Send movement to other players
+        state.getPlayerGame(playerId, gameId => {
+            state.getGamePlayers(gameId, players => {
+                publish({
+                    type: 3,
+                    to: players.filter(p => p.id !== playerId).map(p => p.address),
+                    content: movement
+                });
+            });
+        });
+    };
+
+    return {
+        move
+    };
 };
 
-const movementHandler = (publish: Function) => ({
-    move: move(publish)
-});
-
 export default movementHandler;
-export { Movement } from '../types';

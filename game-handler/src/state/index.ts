@@ -7,7 +7,7 @@ const client = redis.createClient({ host: 'redis' });
 const get = (key: string, callback: Function) => client.get(key, (err, reply) => callback(err, JSON.parse(reply)));
 const set = (key: string, data: object | number) => client.set(key, JSON.stringify(data));
 
-export const getPlayer = (playerId: number, callback: (p: Player) => void) =>
+export const getPlayer = (playerId: number, callback: (a: Player) => void) =>
     get(`player:${playerId}`, (err: Error | null, player: Player) => {
         if (err) throw err;
         callback(player);

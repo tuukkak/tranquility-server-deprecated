@@ -1,5 +1,6 @@
 import rabbitmq from './rabbitmq';
-import movementHandler, { Movement } from './movement';
+import movementHandler from './movement';
+import { Movement } from './types';
 
 rabbitmq('amqp://rabbitmq', async (publisher, listener) => {
     const publish = await publisher('outward');
