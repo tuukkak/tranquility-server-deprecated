@@ -11,6 +11,13 @@ services:
     game-handler:
         build: ./game-handler
         command: ["dockerize", "-wait", "tcp://rabbitmq:5672", "-timeout", "60s", "npm", "start"]
+    spell-handler:
+        build: ./spell-handler
+        environment:
+            - NODE_ENV:dev
+        volumes:
+            - ./spell-handler/src:/src
+        command: ["dockerize", "-wait", "tcp://rabbitmq:5672", "-timeout", "60s", "npm", "start"]
     redis:
         image: redis:5.0.3-alpine
     rabbitmq:
