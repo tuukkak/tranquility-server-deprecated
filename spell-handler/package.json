@@ -1,0 +1,27 @@
+{
+  "name": "spell-handler",
+  "version": "1.0.0",
+  "description": "Spell handler for Tranquility server",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "nodemon -w src --exec ts-node src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/tuukkak/tranquility-server.git"
+  },
+  "author": "Tuukka Koivisto <koivisto.tuukka@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@types/amqplib": "^0.5.9",
+    "@types/redis": "^2.8.10",
+    "amqplib": "^0.5.3",
+    "redis": "^2.8.0",
+    "ts-node": "^8.0.2",
+    "typescript": "^3.2.4"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
