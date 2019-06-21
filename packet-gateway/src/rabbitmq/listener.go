@@ -6,18 +6,19 @@ import (
 	"udpout"
 )
 
+// Listener ...
 func Listener(que string) {
 	if channel == nil {
 		connect()
 	}
 
 	q, e := channel.QueueDeclare(
-		que, // name
-		false,   // durable
-		false,   // delete when unused
-		false,   // exclusive
-		false,   // no-wait
-		nil,     // arguments
+		que,   // name
+		false, // durable
+		false, // delete when unused
+		false, // exclusive
+		false, // no-wait
+		nil,   // arguments
 	)
 	err.Handler(e, "Failed to declare a queue")
 
@@ -42,6 +43,6 @@ func Listener(que string) {
 	}()
 
 	log.Printf("Waiting for messages...")
-	
+
 	<-forever
 }

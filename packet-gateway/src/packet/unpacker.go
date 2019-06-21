@@ -1,13 +1,13 @@
 package packet
 
 import (
+	"bytes"
 	"encoding/binary"
 	"math"
-	"bytes"
 )
 
 const (
-	ACK	= iota
+	ACK = iota
 	LOGIN
 	JOIN
 	MOVEMENT
@@ -37,15 +37,15 @@ func Unpack(buffer []byte) Packet {
 		index += size
 
 		size = 4
-		packet.CordX = float32FromBytes(buffer[index:index+size])
+		packet.CordX = float32FromBytes(buffer[index : index+size])
 		index += size
 
 		size = 4
-		packet.CordZ = float32FromBytes(buffer[index:index+size])
+		packet.CordZ = float32FromBytes(buffer[index : index+size])
 		index += size
 
 		size = 4
-		packet.Rotation = float32FromBytes(buffer[index:index+size])
+		packet.Rotation = float32FromBytes(buffer[index : index+size])
 		index += size
 
 		size = 1
@@ -54,6 +54,18 @@ func Unpack(buffer []byte) Packet {
 
 		size = 1
 		packet.InputZ = int8(buffer[index])
+		index += size
+	case SPELL:
+		size = 1
+		packet.PlayerId = buffer[index]
+		index += size
+
+		size = 1
+		packet.TargetId = buffer[index]
+		index += size
+
+		size = 1
+		packet.SpellId = buffer[index]
 		index += size
 	}
 

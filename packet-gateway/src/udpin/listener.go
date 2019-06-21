@@ -1,17 +1,17 @@
 package udpin
 
 import (
-	"log"
-	"packet"
 	"conn"
-	"rabbitmq"
-	"net"
 	"encoding/json"
 	"err"
+	"log"
+	"net"
+	"packet"
+	"rabbitmq"
 )
 
 const (
-	ACK	= iota
+	ACK = iota
 	LOGIN
 	JOIN
 	MOVEMENT
@@ -31,7 +31,7 @@ func Listener() {
 }
 
 func handlePacket(buf []byte, addr net.Addr) {
-	packet := packet.Unpack(buf);
+	packet := packet.Unpack(buf)
 
 	switch packet.MsgType {
 	case LOGIN:
@@ -41,6 +41,9 @@ func handlePacket(buf []byte, addr net.Addr) {
 		rabbitmq.Publish("join", packetToJson(packet))
 	case MOVEMENT:
 		rabbitmq.Publish("movement", packetToJson(packet))
+	case SPELL:
+		log.Println("SPELLING")
+		rabbitmq.Publish("spell", packetToJson(packet))
 	}
 }
 
