@@ -9,6 +9,10 @@ const app = async () => {
     listener('spell', (msg: SpellCast) => {
         spell.cast(msg);
     });
+
+    listener('movement', (msg: Movement) => {
+        spell.move(msg);
+    });
 }
 
 app();
