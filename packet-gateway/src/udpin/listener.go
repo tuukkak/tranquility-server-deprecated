@@ -18,6 +18,7 @@ const (
 	SPELL
 )
 
+// Listener ...
 func Listener() {
 	log.Println("Starting UDP listener...")
 	for {
@@ -35,19 +36,22 @@ func handlePacket(buf []byte, addr net.Addr) {
 
 	switch packet.MsgType {
 	case LOGIN:
+		log.Println("LOGIN received")
 		packet.Address = addr.String()
-		rabbitmq.Publish("login", packetToJson(packet))
+		rabbitmq.Publish("login", packetToJSON(packet))
 	case JOIN:
-		rabbitmq.Publish("join", packetToJson(packet))
+		log.Println("JOIN received")
+		rabbitmq.Publish("join", packetToJSON(packet))
 	case MOVEMENT:
-		rabbitmq.Publish("movement", packetToJson(packet))
+		log.Println("MOVEMENT received")
+		rabbitmq.Publish("movement", packetToJSON(packet))
 	case SPELL:
-		log.Println("SPELLING")
-		rabbitmq.Publish("spell", packetToJson(packet))
+		log.Println("SPELL received")
+		rabbitmq.Publish("spell", packetToJSON(packet))
 	}
 }
 
-func packetToJson(packet packet.Packet) []byte {
+func packetToJSON(packet packet.Packet) []byte {
 	json, e := json.Marshal(packet)
 	err.Handler(e, "Couldn't json marshal the packet")
 	return json

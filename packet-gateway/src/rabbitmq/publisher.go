@@ -25,5 +25,5 @@ func Publish(key string, msg []byte) {
 	)
 	err.Handler(e, "Failed to publish a message")
 
-	log.Printf("Sent: %s", msg)
+	log.Printf("Publishing packet: %s", msg)
 }

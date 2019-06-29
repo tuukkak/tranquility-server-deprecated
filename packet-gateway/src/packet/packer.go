@@ -1,11 +1,11 @@
 package packet
 
 import (
-	"encoding/binary"
 	"bytes"
-	"log"
+	"encoding/binary"
 )
 
+// Pack ...
 func Pack(msgType uint8, content Content) []byte {
 	size := 1024
 	data := make([]byte, size)
@@ -16,7 +16,7 @@ func Pack(msgType uint8, content Content) []byte {
 		data[1] = content.Id
 		data = data[:size]
 	case 2:
-		size = 2 + int(content.Length) * 14
+		size = 2 + int(content.Length)*14
 		data[0] = 2
 		data[1] = content.Length
 		index := 2
@@ -39,13 +39,12 @@ func Pack(msgType uint8, content Content) []byte {
 		data[14] = byte(content.InputX)
 		data[15] = byte(content.InputZ)
 		data = data[:size]
-		log.Println(data)
 	}
 	return data
 }
 
 func bytesFromFloat32(f float32) []byte {
 	var buf bytes.Buffer
-    binary.Write(&buf, binary.LittleEndian, f)
-    return buf.Bytes()
+	binary.Write(&buf, binary.LittleEndian, f)
+	return buf.Bytes()
 }

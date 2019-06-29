@@ -37,7 +37,6 @@ func Listener(que string) {
 
 	go func() {
 		for d := range msgs {
-			log.Printf("Received outgoing message: %s", d.Body)
 			udpout.Publish(d.Body)
 		}
 	}()

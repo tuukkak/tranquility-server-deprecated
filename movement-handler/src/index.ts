@@ -7,6 +7,7 @@ const app = async () => {
     const movement = movementHandler(await publisher('outward'));
 
     listener('movement', (msg: Movement) => {
+        console.log('Movement received');
         movement.move(msg);
     });
 }

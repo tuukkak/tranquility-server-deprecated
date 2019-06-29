@@ -3,7 +3,6 @@ import * as state from '../state';
 
 const movementHandler = (publish: Function) => {
     const move = (movement: Movement) => {
-        console.log('Received movement:', movement);
         const { playerId } = movement;
 
         // Save movement in state

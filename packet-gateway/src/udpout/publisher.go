@@ -1,17 +1,16 @@
 package udpout
 
 import (
-	"log"
-	"packet"
+	"conn"
 	"encoding/json"
 	"err"
-	"conn"
 	"net"
+	"packet"
 )
 
+// Publish ...
 func Publish(data []byte) {
 	packetOut := jsonToPacket(data)
-	log.Println(packetOut)
 	packetData := packet.Pack(packetOut.MsgType, packetOut.Content)
 	for _, addr := range packetOut.To {
 		addr, e := net.ResolveUDPAddr("udp", addr)
