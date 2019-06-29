@@ -25,7 +25,7 @@ const spellHandler = (publish: Function) => {
         // Remove cast from state
         state.clearSpellCast(playerId);
         // Send cancel info to other players
-        relaySpellCast({ ...spellCast, state: 3 });
+        relaySpellCast({ ...spellCast, state: 2 });
     }
 
     return {
