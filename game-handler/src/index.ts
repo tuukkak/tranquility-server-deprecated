@@ -2,9 +2,9 @@ import rabbitmq from './rabbitmq';
 import { Login, Join } from './types';
 import gameHandler from './game';
 
-rabbitmq('amqp://rabbitmq', async (publisher, listener) => {
-    const publish = await publisher('outward');
-    const game = gameHandler(publish);
+const app = async () => {
+    const { publisher, listener } = await rabbitmq('amqp://rabbitmq');
+    const game = gameHandler(publisher);
 
     listener('login', (msg: Login) => {
         console.log('New player logged in');
@@ -15,4 +15,6 @@ rabbitmq('amqp://rabbitmq', async (publisher, listener) => {
         console.log('New player joined queue');
         game.join(msg);
     });
-});
+}
+
+app();

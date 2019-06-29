@@ -1,24 +1,40 @@
 import * as amqplib from 'amqplib';
 
-const channel = (host: string) => amqplib.connect(host).then(conn => conn.createChannel());
+const exchange = 'game';
 
-const publisher = (channel: amqplib.Channel) => (que: string) =>
-    channel
-        .assertQueue(que, { durable: false })
-        .then(_ok => (msg: object) => channel.sendToQueue(que, Buffer.from(JSON.stringify(msg))));
-
-const listener = (channel: amqplib.Channel) => (que: string, callback: Function) => {
-    channel.assertQueue(que, { durable: false }).then(_ok =>
-        channel.consume(que, msg => {
-            if (msg !== null) {
-                channel.ack(msg);
-                callback(JSON.parse(msg.content.toString()));
-            }
-        })
-    );
+const createChannel = async (host: string) => {
+    const connection = await amqplib.connect(host);
+    const channel = await connection.createChannel();
+    await channel.assertExchange(exchange, 'direct', {
+        durable: false
+    });
+    return channel;
 };
 
-const rabbitmq = (host: string, callback: (publisher: Function, listener: Function) => void) =>
-    channel(host).then(channel => callback(publisher(channel), listener(channel)));
+const publisher = async (channel: amqplib.Channel) => {
+    return (que: string) =>
+        channel
+            .assertQueue(que, { durable: false })
+            .then(_ok => (msg: object) => channel.sendToQueue(que, Buffer.from(JSON.stringify(msg))));
+};
+
+const listener = async (channel: amqplib.Channel) => {
+    return (key: string, callback: Function) => {
+        channel.assertQueue('', { exclusive: true }).then(q => {
+            channel.bindQueue(q.queue, exchange, key);
+            channel.consume(q.queue, msg => {
+                if (msg !== null) {
+                    channel.ack(msg);
+                    callback(JSON.parse(msg.content.toString()));
+                }
+            });
+        });
+    };
+};
+
+const rabbitmq = async (host: string) =>
+    createChannel(host)
+        .then(channel => Promise.all([publisher(channel), listener(channel)]))
+        .then(([publisher, listener]) => ({ publisher, listener }));
 
 export default rabbitmq;
