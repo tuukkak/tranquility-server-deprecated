@@ -4,7 +4,7 @@ import gameHandler from './game';
 
 const app = async () => {
     const { publisher, listener } = await rabbitmq('amqp://rabbitmq');
-    const game = gameHandler(publisher);
+    const game = gameHandler(await publisher('outward'));
 
     listener('login', (msg: Login) => {
         console.log('New player logged in');
